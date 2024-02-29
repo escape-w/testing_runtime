@@ -45,6 +45,7 @@ jobs:
             [ $? != 0 ] && { echo "Invalid Email name";exit 1; } || echo "Valid email"
 
     perform-action:
+      needs: check-details
       runs-on: ubuntu-latest
       steps:        
         - name: Setup python

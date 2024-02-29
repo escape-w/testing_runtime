@@ -65,7 +65,7 @@ jobs:
         - name: Create new product
           working-directory: repo
           run: |
-            echo Performing action: ${{ github.event.inputs.branch-name }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
+            echo "Performing action: ${{ github.event.inputs.branch-name }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
             if [ ${{ github.event.inputs.ad-invite }} ]
             then
               python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }} --Azure

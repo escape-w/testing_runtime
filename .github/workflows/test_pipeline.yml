@@ -76,7 +76,8 @@ jobs:
         - name: Commit changes for new user
           working-directory: common-products
           run: |
-            cat example.tf
+            ls -ltr
+            cat repo/example.tf
             git checkout -b ${{ github.event.inputs.branch-name }}
             git add .
             git config --local user.name "github-actions[bot]"

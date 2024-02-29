@@ -62,7 +62,7 @@ jobs:
           run: pip install -r requirements.txt
           working-directory: repo
 
-        - name: Create new product
+        - name: Executing script
           working-directory: repo
           run: |
             echo "Performing action: ${{ github.event.inputs.branch-name }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
@@ -72,3 +72,14 @@ jobs:
             else
               python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }}
             fi
+        
+        - name: Commit changes for new user
+          working-directory: common-products
+          run: |
+            cat example.tf
+            git checkout -b ${{ github.event.inputs.branch-name }}
+            git add .
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into xyz"
+            git push --set-upstream origin ${{ github.event.inputs.branch-name }}

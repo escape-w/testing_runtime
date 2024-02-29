@@ -43,14 +43,32 @@ jobs:
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             echo $USER_EMAIL | grep -E '[[:alnum:]"[[:alnum:]%&'"'"'*+/=?`{|}~^.-]+@[[:alnum:]_-]+(\.[[:alnum:]_-]+)*\.[[:alpha:]]{2,6}' -q
             [ $? != 0 ] && { echo "Invalid Email name";exit 1; } || echo "Valid email"
-      
-        - name: List files before checkout
-          run: |
-            ls -ltr
+
+    perform-action:
+      runs-on: ubuntu-latest
+      steps:        
+        - name: Setup python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.8'
         
         - name: Checkout repository
           uses: actions/checkout@v4
+          with:
+            path: repo
 
-        - name: List files after checkout
+        - name: Install requirements
+          run: pip install -r requirements.txt
+          working-directory: repo
+
+        - name: Create new product
+          working-directory: repo
           run: |
-            ls -ltr
+            echo Performing action: ${{ github.event.inputs.branch-name }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
+            if [ ${{ github.event.inputs.ad-invite }} ]
+            then
+              python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }} --Azure
+              echo "Product ${{ github.event.inputs.product-name }} created successfully";
+            else
+              python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }}
+            fi

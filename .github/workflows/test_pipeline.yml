@@ -84,3 +84,16 @@ jobs:
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into xyz"
             git push --set-upstream origin ${{ github.event.inputs.branch-name }}
+
+        - name: Get a GitHub app token to give this action access to our repo
+          id: get_token
+          uses: getsentry/action-github-app-token@v2.0.0
+          with:
+            private_key: ${{ secrets.CODE_BOT_APP_PEM }}
+            app_id: ${{ secrets.CODE_BOT_APP_ID }}
+
+        - name: Create pull request
+          working-directory: common-products
+          run: gh pr create -B 'main' -H ${{ github.event.inputs.branch-name }} --title '[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into xyz' --body 'Created by Github action 💪'
+          env:
+            GH_ENTERPRISE_TOKEN: ${{ steps.get_token.outputs.token }}

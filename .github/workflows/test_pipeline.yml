@@ -1,0 +1,39 @@
+name: Runrtime user Github/Azure onboard
+
+on:
+  workflow_dispatch:
+    inputs:
+        branch-name:
+          type: string
+          description: "RUNTREQ number (e.g: RUNTREQ-1234)"
+          required: true
+        user-email:
+          type: string
+          description: "Email address of user"
+          required: true
+        user-department:
+          type: string
+          description: "Department of user"
+          required: true
+          options:
+          - DE-47
+          - DE-XY
+        ad-invite:
+          type: boolean
+          description: "Azure access req uired"
+          default: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+    check-details:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check branch name
+          run: |
+            BRANCH_NAME="${{ github.event.inputs.branch-name }}"
+            echo $BRANCH_NAME | grep -E "^RUNTREQ-[0-9]{4}$" -q
+            [ $? != 0 ] && { echo "Invalid Branch name"; exit 1; }

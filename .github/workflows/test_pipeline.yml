@@ -69,7 +69,6 @@ jobs:
             if [ ${{ github.event.inputs.ad-invite }} ]
             then
               python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }} --Azure
-              echo "done"
             else
               python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }}
             fi

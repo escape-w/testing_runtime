@@ -36,10 +36,4 @@ jobs:
           run: |
             BRANCH_NAME="${{ github.event.inputs.branch-name }}"
             echo $BRANCH_NAME | grep -E "^RUNTREQ-[0-9]{4}$" -q
-            if [ $? != 0 ]
-            then
-              echo "Invalid Branch name"
-              exit 1
-            else
-              echo "hello"
-            fi
+            [ $? != 0 ] && { echo "Invalid Branch name";exit 1; } || echo "hello"

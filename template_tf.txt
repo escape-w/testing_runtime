@@ -1,0 +1,11 @@
+module "{module_name}" {{
+   source = "./modules/user"
+
+   email_address     = "{email}"
+   first_name        = "{first_name}"
+   last_name         = "{last_name}"
+   bmw_department    = "{bmw_department}"
+   bmw_employee_type = "{bmw_employee_type}"
+   github_username   = "{first_name}{middle_name}{last_name}"
+   ad_invite         = {ad_invite}
+ }}

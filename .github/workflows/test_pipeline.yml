@@ -44,6 +44,13 @@ jobs:
             echo $USER_EMAIL | grep -E '[[:alnum:]"[[:alnum:]%&'"'"'*+/=?`{|}~^.-]+@[[:alnum:]_-]+(\.[[:alnum:]_-]+)*\.[[:alpha:]]{2,6}' -q
             [ $? != 0 ] && { echo "Invalid Email name";exit 1; } || echo "Valid email"
       
-        - name: List files
+        - name: List files before checkout
+          run: |
+            ls -ltr
+        
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: List files after checkout
           run: |
             ls -ltr

@@ -42,3 +42,4 @@ jobs:
               exit 1
             else
               echo "hello"
+            fi

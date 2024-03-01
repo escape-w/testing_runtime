@@ -96,7 +96,7 @@ jobs:
           working-directory: repo
           run: |
             echo "token ${{ steps.get_token.outputs.token }}"
-            gh pr create -B 'main' -H ${{ github.event.inputs.branch-name }} --title '[${{ github.event.inputs.branch-name }}]'
+            gh pr create -B 'master' -H ${{ github.event.inputs.branch-name }} --title '[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into Orbit' --body 'Created by Github action 💪'
           env:
             GH_TOKEN: ${{ steps.get_token.outputs.token }}
             GH_HOST: github.com

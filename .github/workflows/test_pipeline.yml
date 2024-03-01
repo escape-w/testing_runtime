@@ -93,7 +93,7 @@ jobs:
             app_id: ${{ secrets.CODE_BOT_APP_ID }}
 
         - name: Create pull request
-          working-directory: common-products
+          working-directory: repo
           run: gh pr create -B 'main' -H ${{ github.event.inputs.branch-name }} --title '[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into xyz' --body 'Created by Github action 💪'
           env:
             GH_ENTERPRISE_TOKEN: ${{ steps.get_token.outputs.token }}

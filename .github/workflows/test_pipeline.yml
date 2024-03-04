@@ -33,12 +33,14 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Check Request number
+          shell: bash {0}
           run: |
             BRANCH_NAME="${{ github.event.inputs.branch-name }}"
             echo $BRANCH_NAME | grep -E "^RUNTREQ-[0-9]{4}$" -q
             [ $? != 0 ] && { echo "Invalid Branch name";exit 1; } || echo "Valid request" 
         
         - name: Check user email
+          shell: bash {0}
           run: |
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             echo $USER_EMAIL | grep -E '[[:alnum:]"[[:alnum:]%&'"'"'*+/=?`{|}~^.-]+@[[:alnum:]_-]+(\.[[:alnum:]_-]+)*\.[[:alpha:]]{2,6}' -q
@@ -65,7 +67,7 @@ jobs:
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             echo "Email to check in file $USER_EMAIL"
             grep -qi $USER_EMAIL ./example.tf 
-            [ $? = 0 ] && { echo "Email alreay configured";exit 1; }
+            [ $? = 0 ] && { echo "Email alreay configured";exit 1; } || echo "Going forward"
 
         - name: Install requirements
           run: pip install -r requirements.txt

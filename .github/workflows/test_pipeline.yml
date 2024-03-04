@@ -62,8 +62,9 @@ jobs:
           working-directory: repo
           run: |
             USER_EMAIL="${{ github.event.inputs.user-email }}"
-            grep -i $USER_EMAIL ./example.tf -q
-            [ $? == 0 ] && { echo "Email alreay configured";exit 1; }
+            echo "Email to check in file $USER_EMAIL"
+            grep -qi $USER_EMAIL ./example.tf 
+            [ $? == 0 ] && { echo "Email alreay configured";exit 1; } || echo "hello"
 
         - name: Install requirements
           run: pip install -r requirements.txt

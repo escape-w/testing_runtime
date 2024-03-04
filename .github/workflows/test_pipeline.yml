@@ -37,14 +37,14 @@ jobs:
           run: |
             BRANCH_NAME="${{ github.event.inputs.branch-name }}"
             echo $BRANCH_NAME | grep -E "^RUNTREQ-[0-9]{4}$" -q
-            [ $? != 0 ] && { echo "Invalid Branch name";exit 1; } || echo -e "\033[0;32mValid request\033[0m"
+            [ $? != 0 ] && { echo -e "\033[0;31mInvalid request\033[0m";exit 1; } || echo -e "\033[0;32mValid request\033[0m"
         
         - name: Check user email
           shell: bash {0}
           run: |
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             echo $USER_EMAIL | grep -E '[[:alnum:]"[[:alnum:]%&'"'"'*+/=?`{|}~^.-]+@[[:alnum:]_-]+(\.[[:alnum:]_-]+)*\.[[:alpha:]]{2,6}' -q
-            [ $? != 0 ] && { echo "Invalid Email name";exit 1; } || echo -e "\033[0;32mValid email\033[0m"
+            [ $? != 0 ] && { echo -e "\033[0;31mInvalid Email\033[0m";exit 1; } || echo -e "\033[0;32mValid email\033[0m"
 
     perform-action:
       needs: check-details

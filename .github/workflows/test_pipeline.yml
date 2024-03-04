@@ -60,6 +60,7 @@ jobs:
 
         - name: Check email already used
           working-directory: repo
+          shell: bash {0}
           run: |
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             echo "Email to check in file $USER_EMAIL"

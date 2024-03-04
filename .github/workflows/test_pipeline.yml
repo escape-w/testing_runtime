@@ -59,6 +59,7 @@ jobs:
             path: repo
 
         - name: Check email already used
+          working-directory: repo
           run: |
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             grep -i $USER_EMAIL ./example.tf -q

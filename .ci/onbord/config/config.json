@@ -1,0 +1,4 @@
+{
+    "template_file" : "/templates/tf_template.txt",
+    "target_file"   : "/../../example.tf"
+}

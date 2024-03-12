@@ -49,15 +49,14 @@ def get_values(email, department, ad_invite):
     
     values = {}
 
-    values['module_name'] = email.translate(str.maketrans({'.': '_', '@': '_'}))
+    values['module_name'] = (email.translate(str.maketrans({'.': '_', '@': '_'}))).lower()
     values['first_name'] = (matched.group('firstname')).capitalize()
     values['middle_name'] = (matched.group('middlename')).capitalize() if matched.group('middlename') else ""
     values['last_name'] = (matched.group('lastname')).capitalize()
     values['bmw_department'] = department
-    values['bmw_employee_type']   = ((matched.group('domain')).replace('partner','external')).replace('bmw','internal')
-    print(values['bmw_employee_type'])
+    values['bmw_employee_type']   = (((matched.group('domain')).lower()).replace('partner','external')).replace('bmw','internal')
     values['ad_invite'] = ad_invite
-    values['email'] = (email).capitalize()
+    values['email'] = email
 
     return values
 
@@ -74,13 +73,25 @@ def parse_options():
 
 
 if __name__ == "__main__":
+    WORK_DIR=os.path.dirname(os.path.realpath(__file__))
     args = parse_options()
-        
+    
+    CONFIG_FILE = Path(WORK_DIR + "/config/config.json")
+    assert CONFIG_FILE.exists(), "config.json must present in config directory"
+
+    config = json.load(open(CONFIG_FILE))
+    
+    TEMPLATE_FILE = Path(WORK_DIR + config['template_file'])
+    assert TEMPLATE_FILE.exists(), "details of template file is invalid in config/config.json"
+    
+    TARGET_FILE = Path(WORK_DIR + config['target_file'])
+    assert TEMPLATE_FILE.exists(), "details of target file is invalid in config/config.json"
+    
     detail_value = get_values(args.mail,args.department,(str(args.Azure)).lower())
 
     if not(detail_value):
         exit(1)
     
-    template = read_file('./temaplate_file_tf.txt')
+    template = read_file(TEMPLATE_FILE)
 
-    append_file('./example.tf',template.format(**detail_value))
+    append_file(TARGET_FILE,template.format(**detail_value))

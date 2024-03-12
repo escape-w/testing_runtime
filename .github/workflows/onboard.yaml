@@ -1,9 +1,9 @@
-name: Runrtime user Github/Azure onboard
+name: Runtime user Github/Azure onboard
 
 on:
   workflow_dispatch:
     inputs:
-        branch-name:
+        request-number:
           type: string
           description: "RUNTREQ number (e.g: RUNTREQ-1234)"
           required: true
@@ -16,12 +16,12 @@ on:
           description: "Department of user"
           required: true
           options:
-          - DE-47
           - DE-XY
+          - DE-ABB          
         ad-invite:
           type: boolean
           description: "Azure access required"
-          default: true
+          default: false
 
 permissions:
   contents: write
@@ -35,7 +35,7 @@ jobs:
         - name: Check Request number
           shell: bash {0}
           run: |
-            BRANCH_NAME="${{ github.event.inputs.branch-name }}"
+            BRANCH_NAME="${{ github.event.inputs.request-number }}"
             echo $BRANCH_NAME | grep -E "^RUNTREQ-[0-9]{4}$" -q
             [ $? != 0 ] && { echo -e "\033[0;31mInvalid request\033[0m";exit 1; } || echo -e "\033[0;32mValid request\033[0m"
         
@@ -56,7 +56,7 @@ jobs:
             python-version: '3.8'
         
         - name: Checkout repository
-          uses: actions/checkout@v4
+          uses: actions/checkout@v2
           with:
             path: repo
 
@@ -70,31 +70,29 @@ jobs:
             [ $? = 0 ] && { echo -e "\033[0;31mEmail alreay configured\033[0m";exit 1; } || echo -e "\033[0;32mGoinf Forward\033[0m"
 
         - name: Install requirements
-          run: pip install -r requirements.txt
+          run: pip install -r ./.ci/onboard/requirements.txt
           working-directory: repo
 
         - name: Executing script
           working-directory: repo
           run: |
-            echo "Performing action: ${{ github.event.inputs.branch-name }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
+            echo "Performing action: ${{ github.event.inputs.request-number }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
             if [ ${{ github.event.inputs.ad-invite }} ]
             then
-              python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }} --Azure
+              python3 ./.ci/onboard/app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }} --Azure
             else
-              python3 ./app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }}
+              python3 ./.ci/onboard/app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }}
             fi
         
         - name: Commit changes for new user
           working-directory: repo
           run: |
-            ls -ltr
-            cat example.tf
-            git checkout -b ${{ github.event.inputs.branch-name }}
+            git checkout -b ${{ github.event.inputs.request-number }}
             git add .
             git config --local user.name "github-actions[bot]"
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git commit -m "[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into xyz"
-            git push --set-upstream origin ${{ github.event.inputs.branch-name }}
+            git commit -m "[${{ github.event.inputs.request-number }}] : Onboard new user"
+            git push --set-upstream origin ${{ github.event.inputs.request-number }}
 
         - name: Get a GitHub app token to give this action access to our repo
           id: get_token
@@ -107,7 +105,7 @@ jobs:
           working-directory: repo
           run: |
             echo "token ${{ steps.get_token.outputs.token }}"
-            gh pr create -B 'main' -H ${{ github.event.inputs.branch-name }} --title '[${{ github.event.inputs.branch-name }}] Onboard ${{ github.event.inputs.user-name }} into Orbit' --body 'Created by Github action 💪'
+            gh pr create -B 'main' -H ${{ github.event.inputs.request-number }} --title '[${{ github.event.inputs.request-number }}] : Onboard new user' --body 'Created by Github action 💪'
           env:
             GH_TOKEN: ${{ steps.get_token.outputs.token }}
-            GH_HOST: github.com
+            GH_HOST: "github.com"

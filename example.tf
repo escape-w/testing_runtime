@@ -22,3 +22,14 @@ module "sumit_agrawal_partner_bmw_de" {
    ad_invite         = true
  }
 
+module "deven_sahu_gmail_com" {
+   source = "./modules/user"
+
+   email_address     = "deven.sahu@gmail.com"
+   first_name        = "Deven"
+   last_name         = "Sahu"
+   bmw_department    = "DE-XY"
+   bmw_employee_type = "gmail"
+   github_username   = "DevenSahu"
+   ad_invite         = true
+ }

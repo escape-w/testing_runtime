@@ -48,7 +48,7 @@ jobs:
           run: |
             USER_DEPARTMENT="${{ github.event.inputs.user-department }}"
             echo $USER_DEPARTMENT | grep '\s' -c -q -v
-            [ $? != 0 ] && { echo -e "\033[0;31mDepartment have space in it\033[0m";exit 1; }
+            [ $? != 0 ] && { echo -e "\033[0;31mDepartment have space in it\033[0m";exit 1; } || echo "Department : $USER_DEPARTMENT"
 
     perform-action:
       needs: check-details

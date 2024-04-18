@@ -12,12 +12,9 @@ on:
           description: "Email address of user"
           required: true
         user-department:
-          type: choice
+          type: string
           description: "Department of user"
-          required: true
-          options:
-          - DE-XY
-          - DE-47      
+          required: true    
         ad-invite:
           type: boolean
           description: "Azure access required"
@@ -45,6 +42,13 @@ jobs:
             USER_EMAIL="${{ github.event.inputs.user-email }}"
             echo $USER_EMAIL | grep -E '[[:alnum:]"[[:alnum:]%&'"'"'*+/=?`{|}~^.-]+@[[:alnum:]_-]+(\.[[:alnum:]_-]+)*\.[[:alpha:]]{2,6}' -q
             [ $? != 0 ] && { echo -e "\033[0;31mInvalid Email\033[0m";exit 1; } || echo -e "\033[0;32mValid email\033[0m"
+        
+        - name: Check user department
+          shell: bash {0}
+          run: |
+            USER_DEPARTMENT="${{ github.event.inputs.user-department }}"
+            echo $USER_DEPARTMENT | grep '\s' -c -q -v
+            [ $? != 0 ] && { echo -e "\033[0;31mDepartment have space in it\033[0m";exit 1; }
 
     perform-action:
       needs: check-details

@@ -93,8 +93,8 @@ jobs:
           run: |
             git checkout -b ${{ github.event.inputs.request-number }}
             git add .
-            git config --local user.name "github-actions[bot]"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git config --local user.name "bot-run"
+            git config --local user.email "bot-run@users.noreply.github.com"
             git commit -m "[${{ github.event.inputs.request-number }}] : Onboard new user"
             git push --set-upstream origin ${{ github.event.inputs.request-number }}
 

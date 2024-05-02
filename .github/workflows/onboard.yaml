@@ -81,7 +81,7 @@ jobs:
           working-directory: repo
           run: |
             echo "Performing action: ${{ github.event.inputs.request-number }} ${{ github.event.inputs.user-email }} ${{ github.event.inputs.user-department }} ${{ github.event.inputs.ad-invite }}"
-            if [ ${{ github.event.inputs.ad-invite }} ]
+            if [ ${{ github.event.inputs.ad-invite }} == 'true' ]
             then
               python3 ./.ci/onboard/app.py -m ${{ github.event.inputs.user-email }} -d ${{ github.event.inputs.user-department }} --Azure
             else

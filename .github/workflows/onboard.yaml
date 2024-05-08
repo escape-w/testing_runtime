@@ -29,7 +29,7 @@ jobs:
     check-details:
       runs-on: ubuntu-latest
       steps:
-        - name: Check Request number
+        - name: Check Request number ${{ github.event.inputs.request-number }}
           shell: bash {0}
           run: |
             BRANCH_NAME="${{ github.event.inputs.request-number }}"

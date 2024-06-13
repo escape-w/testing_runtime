@@ -1,0 +1,6 @@
+directory: .
+compact: true
+quiet: true
+framework: terraform
+evaluate-variables: true
+soft-fail: true

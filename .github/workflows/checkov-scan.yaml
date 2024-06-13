@@ -32,6 +32,7 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           # This will add both a CLI output to the console and create a results.sarif file
+          #https://docs.github.com/en/code-security/code-scanning/troubleshooting-code-scanning/advanced-security-must-be-enabled#confirming-the-cause-of-the-error
           output_format: cli,sarif
           output_file_path: console,results.sarif
           config_file: .ci/config/checkov.yaml

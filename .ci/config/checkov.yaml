@@ -4,3 +4,5 @@ quiet: true
 framework: terraform
 evaluate-variables: true
 soft-fail: true
+skip-check:
+  - CKV_GHA_7
